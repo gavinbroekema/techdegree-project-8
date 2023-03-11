@@ -1,11 +1,26 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
+const { Book } = require('../models');
 
-router.get('/', function(req, res, next) {
-  res.render('layout', { title: 'Express' });
-});
+/* Handler function to wrap each route. */
+function asyncHandler(cb){
+  return async(req, res, next) => {
+    try {
+      await cb(req, res, next)
+    } catch(error){
+      // Forward error to the global error handler
+      next(error);
+    }
+  }
+}
+
+/* GET books listing. */
+
+router.get('/', asyncHandler(async (req, res) => {
+  const books = await Book.findAll({ order: [["createdAt", "DESC"]]});
+  res.render('layout', {data: books});
+}));
 
 router.post('/new', function(req, res, next) {
   res.render('new-book', { title: 'Express' });
