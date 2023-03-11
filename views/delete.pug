@@ -1,0 +1,11 @@
+doctype html
+head
+  title Deleted
+  style 
+    include ../public/stylesheets/style.css
+h2 Delete Book
+p Are you sure you want to delete 
+  em #{book.dataValues.title}
+form(action="/books/" + book.dataValues.id + "/delete", method="post")
+  a(href="/books/" + book.dataValues.id) No! Take me back! 
+  input(type="submit", value = "Yes, I'm sure")

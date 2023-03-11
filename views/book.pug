@@ -11,11 +11,17 @@ table
       th Author
       th Genre
       th Year
+      th Update
+      th Delete
   tbody
       tr
         td #{data.dataValues.title}
         td #{data.dataValues.author}
         td #{data.dataValues.genre}
         td #{data.dataValues.year}
+        td 
+          a.button(href=`/books/${data.dataValues.id}/update`) Update
+        td 
+          a.button(href=`/books/${data.dataValues.id}/delete`) Delete 
 br
-a(href="/books") Back
+a.button(href="/books") Home
