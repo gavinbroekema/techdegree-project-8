@@ -1,0 +1,21 @@
+doctype html
+head
+  title Selected Book
+  style 
+    include ../public/stylesheets/style.css
+h2 Selected Title
+table
+  thead
+    tr
+      th Title
+      th Author
+      th Genre
+      th Year
+  tbody
+      tr
+        td #{data.dataValues.title}
+        td #{data.dataValues.author}
+        td #{data.dataValues.genre}
+        td #{data.dataValues.year}
+br
+a(href="/books") Back

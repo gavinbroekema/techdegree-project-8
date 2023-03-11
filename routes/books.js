@@ -26,9 +26,11 @@ router.post('/new', function(req, res, next) {
   res.render('new-book', { title: 'Express' });
 });
 
-router.get('/:id', function(req, res, next) {
-  res.render('form-error', { title: 'Express' });
-});
+router.get('/:id', asyncHandler(async (req, res) => {
+  const book = await Book.findByPk(req.params.id);
+  console.log(book);
+  res.render('book', {data: book});
+}));
 
 router.post('/:id', function(req, res, next) {
   res.render('index', { title: 'Express' });
