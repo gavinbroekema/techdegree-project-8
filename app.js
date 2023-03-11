@@ -11,10 +11,13 @@ const sequelize = new Sequelize({
   storage: 'library.db'
 });
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/books');
 
 var app = express();
+
+app.get('/', function(req, res) {
+  res.redirect('/books');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,7 +29,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
 app.use('/books', usersRouter);
 
 // catch 404 and forward to error handler
