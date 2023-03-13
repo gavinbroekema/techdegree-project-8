@@ -5,11 +5,10 @@ head
     include ../public/stylesheets/style.css
 h1 New Book
 form(action="/books/new", method="post")
-  if(error) 
-    h2.error Oooops!
+  if error
     ul.error
-      li Title is required
-      li Author is required
+      each err in error
+        li #{err.message}
   p
     label(for='title') Title
     input#title(name='title', type='text')
