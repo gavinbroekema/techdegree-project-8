@@ -5,6 +5,11 @@ head
     include ../public/stylesheets/style.css
 h1 Update Book
 form(method='post', action=`/books/${book.dataValues.id}`)
+  if(error) 
+      h2.error Oooops!
+      ul.error
+        li Title is required
+        li Author is required
   p
     label(for='title') Title
     input#title(name='title', type='text', value=`${book.dataValues.title}`)

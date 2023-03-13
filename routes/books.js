@@ -24,19 +24,23 @@ router.get('/', asyncHandler(async (req, res) => {
 
 /* GET create new book form */
 router.get('/new', function(req, res, next) {
-  res.render('new-book', { title: 'Express' });
+  res.render('new-book');
 });
 
 /* POST create new book page */
 router.post('/new', asyncHandler(async (req, res) => {
   let book;
   try {
-    book = await Book.create(req.body);
-    res.redirect("/");
+    if(req.body.title === "" && req.body.author === "") {
+      res.render('new-book', {error: true})
+    } else {
+      await book.update(req.body);
+      res.redirect("/"); 
+    }
   } catch (error) {
     if(error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
-      res.render("books/new")
+      res.render("/new")
     } else {
       throw error;
     }  
@@ -66,8 +70,12 @@ router.post('/:id', asyncHandler(async (req, res) => {
   try {
     book = await Book.findByPk(req.params.id);
     if(book) {
-      await book.update(req.body);
-      res.redirect("/"); 
+      if(req.body.title !== "" && req.body.author !== "") {
+        await book.update(req.body);
+        res.redirect("/"); 
+      } else {
+        res.render('update-book', {error: true})
+      }
     } else {
       res.sendStatus(404);
     }
