@@ -28,9 +28,21 @@ router.get('/new', function(req, res, next) {
 });
 
 /* POST create new book page */
-router.post('/new', function(req, res, next) {
-  res.render('layout', { title: 'Express' });
-});
+router.post('/:id', asyncHandler(async (req, res) => {
+  let book;
+  try {
+    book = await Book.create(req.body);
+    console.log('hi');
+    res.redirect('book');
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") {
+      book = await Books.build(req.body);
+      res.render("books/new")
+    } else {
+      throw error;
+    }  
+  }
+}));
 
 /* GET single book listing */
 router.get('/:id', asyncHandler(async (req, res) => {
@@ -39,12 +51,40 @@ router.get('/:id', asyncHandler(async (req, res) => {
   res.render('book', {data: book});
 }));
 
-/* UPDATE update book info */
-router.post('/:id', function(req, res, next) {
-  res.render('book', { title: 'Express' });
-});
+/* GET - update book form. */
+router.get("/:id/update", asyncHandler(async (req, res) => {
+  const book = await Book.findByPk(req.params.id);
+  if(book) {
+    res.render("update-book", { book, title: "Delete Book" });
+  } else {
+    res.sendStatus(404);
+  }
+}));
 
-/* Delete book form. */
+/* POST - update book info */
+router.post('/:id/edit', asyncHandler(async (req, res) => {
+  let book;
+  try {
+    book = await Book.findByPk(req.params.id);
+    if(book) {
+      console.log(book);
+      await book.update(req.body);
+      res.redirect("/" + book.id); 
+    } else {
+      res.sendStatus(404);
+    }
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") {
+      book = await Article.build(req.body);
+      book.id = req.params.id;
+      res.render("/update", { book, errors: error.errors, title: "Edit Article" })
+    } else {
+      throw error;
+    }
+  }
+}));
+
+/* GET - delete book form. */
 router.get("/:id/delete", asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
   if(book) {
@@ -54,7 +94,7 @@ router.get("/:id/delete", asyncHandler(async (req, res) => {
   }
 }));
 
-/* Delete individual book. */
+/* POST - delete individual book. */
 router.post('/:id/delete', asyncHandler(async (req ,res) => {
   const book = await Book.findByPk(req.params.id);
   if(book) {
