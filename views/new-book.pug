@@ -4,7 +4,7 @@ head
   style 
     include ../public/stylesheets/style.css
 h1 New Book
-form(action="/books", method="post")
+form(action="/books/new", method="post")
   p
     label(for='title') Title
     input#title(name='title', type='text')
@@ -18,6 +18,6 @@ form(action="/books", method="post")
     label(for='year') Year
     input#year(name='year', type='text')
   p
-    input(type='submit', action='POST', value='Create New Book')
+    input(type='submit', value='Create New Book')
   p
     a.button(href='/') Cancel

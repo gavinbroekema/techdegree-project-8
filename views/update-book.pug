@@ -4,7 +4,7 @@ head
   style 
     include ../public/stylesheets/style.css
 h1 Update Book
-form(method='post', action=`/books/${book.dataValues.id}`)
+form(method='post', action='/books/update')
   p
     label(for='title') Title
     input#title(name='title', type='text', value=`${book.dataValues.title}`)
